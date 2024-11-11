@@ -1,0 +1,40 @@
+generator client {
+  provider             = "prisma-client-py"
+  recursive_type_depth = 5
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Track {
+  usdb_id     Int      @id
+  title       String
+  year        Int
+  cover_src   String
+  genre_id    Int
+  genre       Genre    @relation(fields: [genre_id], references: [id], onDelete: Cascade)
+  artist_id   Int
+  artist      Artist   @relation(fields: [artist_id], references: [id], onDelete: Cascade)
+  language_id Int
+  language    Language @relation(fields: [language_id], references: [id], onDelete: Cascade)
+}
+
+model Artist {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Track Track[]
+}
+
+model Genre {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Track Track[]
+}
+
+model Language {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Track Track[]
+}
